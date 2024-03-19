@@ -1,22 +1,31 @@
 SERVER = server
 CLIENT = client
+LIBFT = cd libft && make
+LIB = libft/libft.a
+
 S_SOURCES = server.c\
 
-C_SOURCES = 
+C_SOURCES = client.c\
+
 
 S_OBJECTS = $(S_SOURCES:.c=.o)
 C_OBJECTS = $(C_SOURCES:.c=.o)
 CC = cc
-CFLAGS = -Wall -Wextra -Werror 
+CFLAGS = -Wall -Wextra -Werror
 RM = rm -f
 
-all: $(SERVER) $(CLIENT)
+comp_start:
+	@$(LIBFT)
+	@make all
+
+all:  $(SERVER) $(CLIENT) 
+
 
 $(SERVER): $(S_OBJECTS) 
-	$(CC) $(CFLAGS) $(S_OBJECTS) -o $(SERVER)
+	$(CC) $(CFLAGS) $(S_OBJECTS) $(LIB) -o $(SERVER)
 
-$(CLIENT): $(CH_OBJECTS) 
-	$(CC) $(CFLAGS) $(CH_OBJECTS) -o $(CLIENT)
+$(CLIENT): $(C_OBJECTS) 
+	$(CC) $(CFLAGS) $(C_OBJECTS) $(LIB) -o $(CLIENT)
 #bonus:$(CLIENT)
 
 
@@ -24,9 +33,11 @@ $(CLIENT): $(CH_OBJECTS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	$(RM) $(OBJECTS) $(CH_OBJECTS)
+	$(RM) $(OBJECTS) $(C_OBJECTS)
+	@cd libft && make clean
 
 fclean: clean
 	$(RM) $(SERVER) $(CLIENT)
+	@cd libft && make fclean
 
-re: fclean all
+re: fclean comp_start
