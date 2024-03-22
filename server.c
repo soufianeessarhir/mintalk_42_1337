@@ -6,7 +6,7 @@
 /*   By: sessarhi <sessarhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 17:26:36 by sessarhi          #+#    #+#             */
-/*   Updated: 2024/03/21 18:06:00 by sessarhi         ###   ########.fr       */
+/*   Updated: 2024/03/22 01:37:52 by sessarhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 
 void signal_handler(int signal)
 {
+	
 	static unsigned char byte;
 	static int i;
 	byte |= (signal == SIGUSR1);
@@ -25,9 +26,9 @@ void signal_handler(int signal)
 	if (i == 8)
 	{
 		if (byte == '\0')
-			ft_printf("\n");
+			write(1,"\n",1);
 		else
-			ft_printf("%c",byte);
+			write(1,&byte,1);
 		i = 0;
 		byte = 0;
 	}
@@ -42,10 +43,11 @@ int main (int ac , char **av)
 	ac = 0;
 	(void)av;
 	ft_memset(&sact,0,sizeof(sact));
-	sact.sa_handler = signal_handler;
+	sact.sa_handler = &signal_handler;
 	pid = getpid();
 	ft_printf("%d\n",pid);
-	puts("hhh\n");
+	sigaction(SIGUSR1,&sact,NULL);
+	sigaction(SIGUSR2,&sact,NULL);
 	while (1)
 	pause();
 	return 0;
