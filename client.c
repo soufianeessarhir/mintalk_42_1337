@@ -6,7 +6,7 @@
 /*   By: sessarhi <sessarhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 22:03:47 by sessarhi          #+#    #+#             */
-/*   Updated: 2024/03/22 01:33:19 by sessarhi         ###   ########.fr       */
+/*   Updated: 2024/03/22 14:57:54 by sessarhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	send_signals(pid_t pid, char *str)
 	while (*str)
 	{
 		i = 7;
+		bit = *str;
 		while (i >= 0)
 		{
 			bit = *str >> i;
@@ -33,7 +34,7 @@ void	send_signals(pid_t pid, char *str)
 				kill(pid,SIGUSR2);
 			else
 				kill(pid,SIGUSR1);
-			usleep(40);
+			usleep(100);
 			i--;
 		}
 		str++;
