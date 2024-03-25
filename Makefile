@@ -50,12 +50,11 @@ bonus: $(B_SERVER) $(B_CLIENT)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	$(RM) $(OBJECTS) $(C_OBJECTS)
+	$(RM) $(OBJECTS) $(C_OBJECTS) $(B_OBJECTS) $(BC_OBJECTS) $(S_OBJECTS) $(BS_OBJECTS)
 	@cd libft && make clean
 
 fclean: clean
-	$(RM) $(SERVER) $(CLIENT)
-	$(RM) $(B_SERVER) $(B_CLIENT)
+	$(RM) $(SERVER) $(CLIENT) $(B_SERVER) $(B_CLIENT)
 	@cd libft && make fclean
 
 re: fclean all
