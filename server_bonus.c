@@ -6,7 +6,7 @@
 /*   By: sessarhi <sessarhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 17:26:36 by sessarhi          #+#    #+#             */
-/*   Updated: 2024/03/25 16:46:32 by sessarhi         ###   ########.fr       */
+/*   Updated: 2024/03/26 03:12:37 by sessarhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,46 @@
 #include <signal.h>
 #include "libft/libft.h"
 
+int byte_count(unsigned char c)
+{
+	int i;
+	i = 0;
+	if (c < 0x80)
+    	
+		i = 1; 
+	else if ((c & 0xe0) == 0xc0)
+		i = 2; 
+	else if ((c & 0xf0) == 0xe0)
+		i = 3; 
+	else if ((c & 0xf8) == 0xf0)
+    	i = 4;
+	return (i);
+	
+}
 void signal_handler(int signal)
 {
 	
 	static unsigned char byte;
+	static unsigned char utf_8_char[5];
 	static int i;
+	static int index;
+	static int byte_num;
 	byte |= (signal == SIGUSR1);
 	i++;
 	if (i == 8)
 	{
-		if (byte == '\0')
-			write(1,"\n",1);
-		else
-			write(1,&byte,1);
+		if (index == 0)
+			byte_num = byte_count(byte);
+			utf_8_char[index++] = byte;
 		i = 0;
 		byte = 0;
+		byte_num--;
+		if (byte_num == 0)
+		{
+			utf_8_char[index] = '\0';
+			ft_printf("%s",utf_8_char);
+			index = 0;
+		}
 	}
 	else
 		byte <<=1;

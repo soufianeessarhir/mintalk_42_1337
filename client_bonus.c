@@ -6,7 +6,7 @@
 /*   By: sessarhi <sessarhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 22:03:47 by sessarhi          #+#    #+#             */
-/*   Updated: 2024/03/25 16:46:19 by sessarhi         ###   ########.fr       */
+/*   Updated: 2024/03/26 02:47:53 by sessarhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	send_signals(pid_t pid, char *str)
 				kill(pid,SIGUSR2);
 			else
 				kill(pid,SIGUSR1);
-			usleep(100);
+			usleep(400);
 			i--;
 		}
 		str++;
