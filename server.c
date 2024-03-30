@@ -6,7 +6,7 @@
 /*   By: sessarhi <sessarhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 17:26:36 by sessarhi          #+#    #+#             */
-/*   Updated: 2024/03/22 14:51:00 by sessarhi         ###   ########.fr       */
+/*   Updated: 2024/03/30 05:46:38 by sessarhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,18 @@
 #include <signal.h>
 #include "libft/libft.h"
 
-void signal_handler(int signal)
+void signal_handler(int signal, siginfo_t *info , void *f)
 {
-	
 	static unsigned char byte;
 	static int i;
+	static int pid;
+	
+	if (info->si_pid != pid)
+	{
+		pid = info->si_pid;
+		i = 0;
+		byte = 0;
+	}
 	byte |= (signal == SIGUSR1);
 	i++;
 	if (i == 8)
@@ -34,6 +41,7 @@ void signal_handler(int signal)
 	}
 	else
 		byte <<=1;
+	(void)f;
 }
 int main (int ac , char **av)
 {
@@ -43,7 +51,7 @@ int main (int ac , char **av)
 	ac = 0;
 	(void)av;
 	ft_memset(&sact,0,sizeof(sact));
-	sact.sa_handler = &signal_handler;
+	sact.sa_sigaction = &signal_handler;
 	pid = getpid();
 	ft_printf("%d\n",pid);
 	sigaction(SIGUSR1,&sact,NULL);
