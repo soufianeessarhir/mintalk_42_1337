@@ -6,7 +6,7 @@
 /*   By: sessarhi <sessarhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 22:03:47 by sessarhi          #+#    #+#             */
-/*   Updated: 2024/03/22 14:57:54 by sessarhi         ###   ########.fr       */
+/*   Updated: 2024/03/31 00:40:08 by sessarhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,16 @@
 #include <signal.h>
 #include "libft/libft.h"
 
+int parcing(char *av)
+{
+	int i;
+	i = 0;
+	while (ft_isdigit(av[i]))
+		i++;
+	if (av[i] != '\0')
+		return (0);
+	return (1);
+}
 void	send_signals(pid_t pid, char *str)
 {
 	unsigned char bit;
@@ -44,7 +54,13 @@ void	send_signals(pid_t pid, char *str)
 int main (int ac , char **av)
 {
 	pid_t pid;
-	if (ac == 3)
+	if (!parcing(av[1]) && !av[2])
+		return (ft_printf("illegal pid\nno message\n"));
+	else if (!av[2] && parcing(av[1]))
+		return (ft_printf("no message\n"));
+	else if (av[2] && !parcing(av[1]))
+		return (ft_printf("illegal pid\n"));
+	if (ac == 3 && av[2])
 	{
 		pid = ft_atoi(av[1]);
 		if (pid > 0)
