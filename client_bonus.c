@@ -6,7 +6,7 @@
 /*   By: sessarhi <sessarhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 22:03:47 by sessarhi          #+#    #+#             */
-/*   Updated: 2024/03/26 02:47:53 by sessarhi         ###   ########.fr       */
+/*   Updated: 2024/03/31 01:15:49 by sessarhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,23 @@
 #include <unistd.h>
 #include <signal.h>
 #include "libft/libft.h"
+
+unsigned char bit;
+void signal_hander(int signal)
+{
+	ft_printf("the message has been received\n");
+	(void)signal;
+}
+int parcing(char *av)
+{
+	int i;
+	i = 0;
+	while (ft_isdigit(av[i]))
+		i++;
+	if (av[i] != '\0')
+		return (0);
+	return (1);
+}
 
 void	send_signals(pid_t pid, char *str)
 {
@@ -34,17 +51,26 @@ void	send_signals(pid_t pid, char *str)
 				kill(pid,SIGUSR2);
 			else
 				kill(pid,SIGUSR1);
-			usleep(400);
+			usleep(100);
 			i--;
 		}
 		str++;
 	}
 	
 }
+
 int main (int ac , char **av)
 {
 	pid_t pid;
-	if (ac == 3)
+
+	signal(SIGUSR1,signal_hander);
+	if (!parcing(av[1]) && !av[2])
+		return (ft_printf("illegal pid\nno message\n"));
+	else if (!av[2] && parcing(av[1]))
+		return (ft_printf("no message\n"));
+	else if (av[2] && !parcing(av[1]))
+		return (ft_printf("illegal pid\n"));
+	if (ac == 3 && av[2])
 	{
 		pid = ft_atoi(av[1]);
 		if (pid > 0)

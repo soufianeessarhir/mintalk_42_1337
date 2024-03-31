@@ -6,7 +6,7 @@
 /*   By: sessarhi <sessarhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 17:26:36 by sessarhi          #+#    #+#             */
-/*   Updated: 2024/03/30 21:11:31 by sessarhi         ###   ########.fr       */
+/*   Updated: 2024/03/31 01:00:29 by sessarhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,10 @@ int byte_count(unsigned char c)
 	return (i);
 	
 }
-void	helper(int *byte_num,int *i)
+void	helper(int *byte_num,int *i, siginfo_t *info)
 {
+	if (byte == '\0')
+		kill(info->si_pid, SIGUSR1);
 	byte = 0;
 	*byte_num -= 1;
 	*i = 0;
@@ -63,7 +65,7 @@ void signal_handler(int signal, siginfo_t *info , void *f)
 		if (index == 0)
 			byte_num = byte_count(byte);
 		utf_8_char[index++] = byte;
-		helper(&byte_num,&i);
+		helper(&byte_num,&i,info);
 		if (byte_num == 0)
 		{
 			utf_8_char[index] = '\0';
