@@ -6,7 +6,7 @@
 /*   By: sessarhi <sessarhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 17:26:36 by sessarhi          #+#    #+#             */
-/*   Updated: 2024/03/30 05:46:38 by sessarhi         ###   ########.fr       */
+/*   Updated: 2024/03/31 05:04:32 by sessarhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ int main (int ac , char **av)
 	pid_t	pid;
 	struct sigaction sact;
 
-	ac = 0;
+	if (ac > 1)
+		return (ft_printf("too many args\n"));
 	(void)av;
 	ft_memset(&sact,0,sizeof(sact));
 	sact.sa_sigaction = &signal_handler;

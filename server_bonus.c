@@ -6,7 +6,7 @@
 /*   By: sessarhi <sessarhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 17:26:36 by sessarhi          #+#    #+#             */
-/*   Updated: 2024/03/31 02:47:39 by sessarhi         ###   ########.fr       */
+/*   Updated: 2024/03/31 05:04:08 by sessarhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,12 @@ void	helper(int *byte_num,int *i, int pid)
 	*i = 0;
 }
 
-void helper_nd(int *pid, siginfo_t *info, int *i)
+void helper_nd(int *pid, siginfo_t *info, int *i,int *index)
 {
 	*pid = info->si_pid;
 	*i = 0;
 	byte = 0;
+	*index = 0;
 }
 void signal_handler(int signal, siginfo_t *info , void *f)
 {
@@ -60,7 +61,7 @@ void signal_handler(int signal, siginfo_t *info , void *f)
 	static int pid;
 	
 	if (info->si_pid != pid)
-		helper_nd(&pid,info,&i);
+		helper_nd(&pid,info,&i,&index);
 	byte |= (signal == SIGUSR1);
 	if (++i == 8)
 	{
@@ -83,8 +84,9 @@ int main (int ac , char **av)
 {
 	pid_t	pid;
 	struct sigaction sact;
-
-	ac = 0;
+	
+	if (ac > 1)
+		return (ft_printf("too many args\n"));
 	(void)av;
 	ft_memset(&sact,0,sizeof(sact));
 	sact.sa_sigaction = &signal_handler;

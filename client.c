@@ -6,7 +6,7 @@
 /*   By: sessarhi <sessarhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 22:03:47 by sessarhi          #+#    #+#             */
-/*   Updated: 2024/03/31 00:40:08 by sessarhi         ###   ########.fr       */
+/*   Updated: 2024/03/31 05:07:13 by sessarhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	send_signals(pid_t pid, char *str)
 				kill(pid,SIGUSR2);
 			else
 				kill(pid,SIGUSR1);
-			usleep(100);
+			usleep(400);
 			i--;
 		}
 		str++;
@@ -54,6 +54,9 @@ void	send_signals(pid_t pid, char *str)
 int main (int ac , char **av)
 {
 	pid_t pid;
+	
+	if (ac > 3 || ac == 1)
+		return (ft_printf("incorrect  args\n"));
 	if (!parcing(av[1]) && !av[2])
 		return (ft_printf("illegal pid\nno message\n"));
 	else if (!av[2] && parcing(av[1]))
