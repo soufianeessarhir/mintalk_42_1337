@@ -6,7 +6,7 @@
 /*   By: sessarhi <sessarhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 22:03:47 by sessarhi          #+#    #+#             */
-/*   Updated: 2024/03/31 01:15:49 by sessarhi         ###   ########.fr       */
+/*   Updated: 2024/03/31 02:46:58 by sessarhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,11 @@
 #include "libft/libft.h"
 
 unsigned char bit;
+
 void signal_hander(int signal)
 {
-	ft_printf("the message has been received\n");
-	(void)signal;
+	if(signal == SIGUSR1)
+		ft_printf("the message has been received\n");
 }
 int parcing(char *av)
 {
@@ -40,13 +41,14 @@ void	send_signals(pid_t pid, char *str)
 
 	i = 0;
 
-	while (*str)
+	int k = 0;
+	while ( k < (int)ft_strlen(str) + 1)
 	{
 		i = 7;
-		bit = *str;
+		bit = str[k];
 		while (i >= 0)
 		{
-			bit = *str >> i;
+			bit = str[k] >> i;
 			if (bit % 2 == 0)
 				kill(pid,SIGUSR2);
 			else
@@ -54,7 +56,7 @@ void	send_signals(pid_t pid, char *str)
 			usleep(100);
 			i--;
 		}
-		str++;
+		k++;
 	}
 	
 }
@@ -62,8 +64,8 @@ void	send_signals(pid_t pid, char *str)
 int main (int ac , char **av)
 {
 	pid_t pid;
+	signal(SIGUSR1 , signal_hander);
 
-	signal(SIGUSR1,signal_hander);
 	if (!parcing(av[1]) && !av[2])
 		return (ft_printf("illegal pid\nno message\n"));
 	else if (!av[2] && parcing(av[1]))
